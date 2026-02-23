@@ -44,6 +44,11 @@ Si usás **MongoDB Atlas**:
 
 ---
 
+## Avisos durante el build
+
+- **npm audit**: Las vulnerabilidades que quedan suelen ser de ESLint (solo dev). Podés ignorarlas o ejecutar `npm audit fix --force` si querés actualizar ESLint (puede requerir ajustes de config).
+- **No build cache found**: Es normal en el primer build. En Render cada deploy empieza sin caché; los siguientes builds en la misma máquina pueden usar caché si la plataforma persiste `.next/cache`.
+
 ## Después del deploy
 
 - **Auto Deploy**: al hacer push a la rama por defecto (p. ej. `master`), Render vuelve a desplegar.

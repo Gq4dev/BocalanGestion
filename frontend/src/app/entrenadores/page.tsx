@@ -27,16 +27,28 @@ export default function EntrenadoresPage() {
       </div>
       {list.length === 0 ? (
         <div className="card text-center py-12 text-neutral-500">
-          No hay entrenadores. <Link href="/entrenadores/nuevo" className="text-yellow-600 hover:underline">Agregar</Link>.
+          No hay entrenadores.{' '}
+          <Link href="/entrenadores/nuevo" className="text-yellow-600 hover:underline">
+            Agregar
+          </Link>
+          .
         </div>
       ) : (
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ul className="card divide-y divide-neutral-200 p-0 overflow-hidden">
           {list.map((t) => (
             <li key={t._id}>
-              <Link href={`/entrenadores/${t._id}`} className="card block hover:border-yellow-400 hover:shadow-md">
-                <div className="font-semibold text-lg">{t.name}</div>
-                {t.phone && <p className="text-sm text-neutral-600">{t.phone}</p>}
-                {t.email && <p className="text-sm text-neutral-500">{t.email}</p>}
+              <Link
+                href={`/entrenadores/${t._id}`}
+                className="flex items-center justify-between px-4 py-3 hover:bg-neutral-50 transition-colors"
+              >
+                <div>
+                  <p className="font-semibold text-base">{t.name}</p>
+                  {t.phone && <p className="text-sm text-neutral-600">{t.phone}</p>}
+                  {t.email && <p className="text-sm text-neutral-500">{t.email}</p>}
+                </div>
+                <span className="text-sm font-medium text-yellow-600">
+                  Ver detalles →
+                </span>
               </Link>
             </li>
           ))}
