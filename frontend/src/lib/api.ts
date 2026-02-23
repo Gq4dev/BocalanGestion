@@ -13,6 +13,24 @@ async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+/** Sube una imagen y devuelve la URL (data URL base64) para guardar en photo. */
+export async function uploadPhoto(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('file', file);
+  const url = `${API}/api/upload`;
+  const res = await fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {},
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error((err as { error?: string }).error || res.statusText);
+  }
+  const data = (await res.json()) as { url: string };
+  return data.url;
+}
+
 export const api = {
   dogs: {
     list: () => fetchApi<Dog[]>(`/api/dogs`),
@@ -95,6 +113,7 @@ export interface Trainer {
   phone?: string;
   email?: string;
   notes?: string;
+  photo?: string;
 }
 
 export interface Beneficiary {

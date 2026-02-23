@@ -50,7 +50,7 @@ export default function NuevoAdolescentePage() {
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/adolescentes" className="text-neutral-500 hover:text-black">← Volver</Link>
+        <Link href="/perros?etapa=adolescente" className="text-neutral-500 hover:text-black">← Volver</Link>
         <h1 className="text-2xl font-bold">Nuevo adolescente en entrenamiento</h1>
       </div>
       <form onSubmit={handleSubmit} className="card space-y-4">
@@ -125,7 +125,7 @@ export default function NuevoAdolescentePage() {
           />
         </div>
         <div className="flex flex-col-reverse sm:flex-row gap-2 pt-2">
-          <Link href="/adolescentes" className="btn-secondary flex-1 sm:flex-none text-center">Cancelar</Link>
+          <Link href="/perros?etapa=adolescente" className="btn-secondary flex-1 sm:flex-none text-center">Cancelar</Link>
           <button type="submit" className="btn-primary flex-1 sm:flex-none" disabled={loading}>
             {loading ? 'Guardando…' : 'Guardar'}
           </button>

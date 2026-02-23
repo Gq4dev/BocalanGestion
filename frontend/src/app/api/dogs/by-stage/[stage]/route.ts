@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/server/db';
 import Dog from '@/server/models/Dog';
+import '@/server/models/SocializationFamily';
+import '@/server/models/Trainer';
+import '@/server/models/Beneficiary';
 
 export async function GET(
   _request: NextRequest,

@@ -12,7 +12,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Perros de Asistencia',
+  title: 'Bocalan Argentina - Gestion',
   description: 'Gestión de perros, cachorros, entrenamiento y graduados',
 };
 
@@ -34,16 +34,13 @@ export default function RootLayout({
           <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
             <Link href="/" className="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors">
               <Image
-                src="/images/Logo_solo_bocalan.jpg"
-                alt="Perros de Asistencia"
+                src="/images/logo.png"
+                alt="Bocalan Argentina - Gestion"
                 width={120}
                 height={44}
-                className="h-9 w-auto sm:h-11 object-contain mix-blend-multiply"
+                className="h-9 w-auto sm:h-11 object-contain"
                 priority
               />
-              <span className="font-bold text-lg tracking-tight hidden sm:inline">
-                Perros de Asistencia
-              </span>
             </Link>
             <HeaderNav />
           </div>
@@ -52,7 +49,7 @@ export default function RootLayout({
           {children}
         </main>
         <footer className="border-t border-black/10 py-4 text-center text-sm text-neutral-500 bg-neutral-50">
-          Asociación de Perros de Asistencia
+          Bocalan Argentina - Gestion
         </footer>
       </body>
     </html>

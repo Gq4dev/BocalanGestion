@@ -6,6 +6,7 @@ const trainerSchema = new mongoose.Schema(
     phone: { type: String },
     email: { type: String },
     notes: { type: String },
+    photo: { type: String },
   },
   { timestamps: true }
 );

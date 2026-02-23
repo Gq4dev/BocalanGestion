@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { api, type Dog, type SocializationFamily, type Trainer, type Beneficiary } from '@/lib/api';
+import { api, uploadPhoto, type Dog, type SocializationFamily, type Trainer, type Beneficiary } from '@/lib/api';
 
 export default function EditarPerroPage() {
   const params = useParams();
@@ -31,6 +31,7 @@ export default function EditarPerroPage() {
         trainer: typeof d.trainer === 'object' && d.trainer ? (d.trainer as Trainer)._id : (d.trainer as string) || '',
         beneficiary: typeof d.beneficiary === 'object' && d.beneficiary ? (d.beneficiary as Beneficiary)._id : (d.beneficiary as string) || '',
         notes: d.notes || '',
+        photo: d.photo || '',
       });
     }).catch(() => {});
     api.socializationFamilies.list().then(setFamilies).catch(() => {});
@@ -51,6 +52,7 @@ export default function EditarPerroPage() {
         sex: form.sex || undefined,
         chipId: form.chipId || undefined,
         notes: form.notes || undefined,
+        photo: form.photo || undefined,
       };
       if (form.socializationFamily) body.socializationFamily = form.socializationFamily; else body.socializationFamily = null;
       if (form.trainer) body.trainer = form.trainer; else body.trainer = null;
@@ -74,6 +76,33 @@ export default function EditarPerroPage() {
         <h1 className="text-2xl font-bold">Editar {dog.name}</h1>
       </div>
       <form onSubmit={handleSubmit} className="card space-y-4">
+        <div>
+          <label className="label">Foto</label>
+          <div className="flex items-center gap-4">
+            {form.photo && (
+              <img src={form.photo} alt="" className="w-20 h-20 object-cover rounded-full border border-neutral-200" />
+            )}
+            <label className="cursor-pointer">
+              <span className="btn-secondary text-sm">{form.photo ? 'Cambiar' : 'Subir foto'}</span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="sr-only"
+                onChange={async (e) => {
+                  const f = e.target.files?.[0];
+                  if (!f) return;
+                  try {
+                    const url = await uploadPhoto(f);
+                    setForm((prev) => ({ ...prev, photo: url }));
+                  } catch (err) {
+                    alert((err as Error).message);
+                  }
+                  e.target.value = '';
+                }}
+              />
+            </label>
+          </div>
+        </div>
         <div>
           <label className="label">Nombre *</label>
           <input

@@ -4,10 +4,18 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { api, type Trainer } from '@/lib/api';
 
+function normalize(s: string) {
+  return s.toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
 export default function EntrenadoresPage() {
   const [list, setList] = useState<Trainer[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const q = normalize(search);
+  const filtered = q ? list.filter((t) => normalize(t.name).includes(q) || (t.phone && normalize(t.phone).includes(q)) || (t.email && normalize(t.email).includes(q))) : list;
 
   useEffect(() => {
     api.trainers.list()
@@ -25,7 +33,15 @@ export default function EntrenadoresPage() {
         <h1 className="text-2xl sm:text-3xl font-bold">Entrenadores</h1>
         <Link href="/entrenadores/nuevo" className="btn-primary w-full sm:w-auto">Nuevo entrenador</Link>
       </div>
-      {list.length === 0 ? (
+      <input
+        type="search"
+        placeholder="Buscar por nombre, teléfono o email…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="input w-full max-w-md"
+        aria-label="Buscar"
+      />
+      {list.length === 0 && !q ? (
         <div className="card text-center py-12 text-neutral-500">
           No hay entrenadores.{' '}
           <Link href="/entrenadores/nuevo" className="text-yellow-600 hover:underline">
@@ -35,7 +51,10 @@ export default function EntrenadoresPage() {
         </div>
       ) : (
         <ul className="card divide-y divide-neutral-200 p-0 overflow-hidden">
-          {list.map((t) => (
+          {filtered.length === 0 ? (
+            <li className="px-4 py-6 text-center text-neutral-500 text-sm">Ningún resultado para «{search}».</li>
+          ) : (
+          filtered.map((t) => (
             <li key={t._id}>
               <Link
                 href={`/entrenadores/${t._id}`}
@@ -51,7 +70,8 @@ export default function EntrenadoresPage() {
                 </span>
               </Link>
             </li>
-          ))}
+          ))
+          )}
         </ul>
       )}
     </div>
