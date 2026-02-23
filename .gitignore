@@ -1,0 +1,26 @@
+# Monorepo ignores
+node_modules/
+.env
+.env.*
+coverage/
+dist/
+build/
+
+# Next.js (frontend)
+frontend/.next/
+frontend/out/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Nested repos / tools
+agent-teams-lite/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+

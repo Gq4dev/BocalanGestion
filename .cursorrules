@@ -1,0 +1,59 @@
+# Memoria persistente (Engram)
+
+Tienes acceso a la memoria persistente Engram vía las herramientas MCP: mem_save, mem_search, mem_session_summary, mem_context, mem_timeline, etc.
+
+- Guarda de forma proactiva después de trabajo significativo (bugfixes, decisiones de arquitectura, patrones, descubrimientos, cambios de config). No esperes a que te lo pidan.
+- Después de cualquier compactación o reinicio de contexto, llama a `mem_context` para recuperar el estado de la sesión antes de continuar.
+- Al cerrar una sesión de trabajo relevante, usa `mem_session_summary` con Goal/Discoveries/Accomplished/Files.
+
+# Agent Teams Lite — Orquestador SDD (Cursor)
+
+Referencia: https://github.com/Gentleman-Programming/agent-teams-lite
+
+## Spec-Driven Development (SDD)
+
+Coordinas el flujo SDD. Mantente ligero: delega el trabajo pesado en los skills, solo llevas el estado.
+
+### Política de artefactos (artifact_store)
+- **mode**: `auto` | `engram` | `openspec` | `none` (por defecto `auto`)
+- **Recomendado**: `engram` — persistente, sin ensuciar el repo
+- **Resolución en auto**: si el usuario pide archivos en repo → `openspec`; si no, si Engram está disponible → `engram`; si ya existe `openspec/` → seguir con openspec; si no → `none`
+
+### Comandos
+- **/sdd:init** — Inicializar SDD en el proyecto (openspec/ solo si mode=openspec)
+- **/sdd:explore &lt;tema&gt;** — Explorar una idea (no crea archivos)
+- **/sdd:new &lt;nombre-cambio&gt;** — Nuevo cambio: exploración + propuesta
+- **/sdd:continue [nombre]** — Siguiente artefacto en la cadena (specs, design, tasks, etc.)
+- **/sdd:ff [nombre]** — Fast-forward: proposal → specs → design → tasks
+- **/sdd:apply [nombre]** — Implementar tareas
+- **/sdd:verify [nombre]** — Validar implementación frente a specs
+- **/sdd:archive [nombre]** — Cerrar cambio y persistir (Engram o openspec)
+
+### Reglas
+1. Para cada fase, lee primero el SKILL.md correspondiente en `skills/sdd-*/` y sigue sus instrucciones.
+2. No implementes código como “orquestador”: sigue el skill sdd-apply para implementar.
+3. Entre fases, muestra al usuario qué se hizo y pregunta si continuar.
+4. Mantén el contexto mínimo: referencias a rutas/artefactos, no volcar todo el contenido.
+5. Persistencia: si Engram está disponible, usa mem_save para propuesta, specs, design, tasks y resúmenes; si el usuario pidió archivos, usa carpeta openspec/.
+
+### Grafo de dependencias
+```
+proposal → specs ──→ tasks → apply → verify → archive
+              ↕
+           design
+```
+
+### Comando → Skill
+| Comando | Skill(s) |
+|---------|----------|
+| /sdd:init | sdd-init |
+| /sdd:explore | sdd-explore |
+| /sdd:new | sdd-explore → sdd-propose |
+| /sdd:continue | Siguiente: sdd-spec, sdd-design, sdd-tasks, sdd-apply, etc. |
+| /sdd:ff | sdd-propose → sdd-spec → sdd-design → sdd-tasks |
+| /sdd:apply | sdd-apply |
+| /sdd:verify | sdd-verify |
+| /sdd:archive | sdd-archive |
+
+### Ubicación de skills
+En este proyecto: `skills/sdd-init/`, `skills/sdd-explore/`, `skills/sdd-propose/`, `skills/sdd-spec/`, `skills/sdd-design/`, `skills/sdd-tasks/`, `skills/sdd-apply/`, `skills/sdd-verify/`, `skills/sdd-archive/`. Cada uno tiene su `SKILL.md`. Para cada fase, lee ese archivo y ejecuta según indica. El resultado de cada sub-agente debe incluir: status, executive_summary, artifacts, next_recommended, risks.
