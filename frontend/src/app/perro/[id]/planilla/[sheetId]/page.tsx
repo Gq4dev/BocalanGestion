@@ -38,7 +38,7 @@ export default function EditarPlanillaPage() {
   const updateSkill = (index: number, field: keyof TrainingSheetSkill, value: string) => {
     setSkills((prev) => {
       const next = [...prev];
-      (next[index] as Record<string, string>)[field] = value;
+      next[index] = { ...next[index], [field]: value };
       return next;
     });
   };
