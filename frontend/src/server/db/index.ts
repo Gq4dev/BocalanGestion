@@ -2,15 +2,14 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
+type Cached = { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
+
 declare global {
   // eslint-disable-next-line no-var
-  var mongoose: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null } | undefined;
+  var mongoose: Cached | undefined;
 }
 
-let cached = global.mongoose;
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
+const cached: Cached = global.mongoose ?? (global.mongoose = { conn: null, promise: null });
 
 export async function connectDB(): Promise<typeof mongoose> {
   if (!MONGODB_URI) {
