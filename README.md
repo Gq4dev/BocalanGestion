@@ -4,8 +4,8 @@ Aplicación web responsive para gestionar la información de una asociación de 
 
 ## Stack
 
-- **Frontend:** Next.js 14 (React), TypeScript, Tailwind CSS. Diseño responsive (móvil, tablet, escritorio).
-- **Backend:** Node.js, Express, MongoDB (Mongoose).
+- **Frontend:** Next.js 15 (React), TypeScript, Tailwind CSS. Diseño responsive (móvil, tablet, escritorio).
+- **API:** Integrada en Next (Route Handlers en `/api/*`) con Mongoose y MongoDB. Un solo despliegue.
 
 ## Requisitos
 
@@ -14,34 +14,23 @@ Aplicación web responsive para gestionar la información de una asociación de 
 
 ## Instalación y ejecución
 
-### 1. Backend
-
-```bash
-cd backend
-cp .env.example .env
-# Editar .env y configurar MONGODB_URI (ej: mongodb://localhost:27017/perros-asistencia)
-npm install
-npm run dev
-```
-
-El API quedará en **http://localhost:4000**.
-
-### 2. Frontend
-
-En otra terminal:
+### Modo unificado (recomendado: frontend + API en Next)
 
 ```bash
 cd frontend
+cp .env.local.example .env.local
+# Editar .env.local y configurar MONGODB_URI (ej: mongodb://localhost:27017/perros-asistencia)
 npm install
 npm run dev
 ```
 
-La web quedará en **http://localhost:3000**. Las peticiones a `/api/*` se redirigen al backend (configurado en `next.config.js`).
+La app quedará en **http://localhost:3000**. La API se sirve en el mismo origen (`/api/dogs`, `/api/beneficiaries`, etc.). No hace falta `NEXT_PUBLIC_API_URL` en local.
 
-### Producción
+### Producción (un solo servicio)
 
-- **Backend:** `npm start` (puerto por defecto 4000 o la variable `PORT`).
-- **Frontend:** `npm run build` y `npm start`. Configurar `NEXT_PUBLIC_API_URL` con la URL pública del backend (ej: `https://tu-api.com`) para que el cliente llame al API correcto.
+- Desplegar solo **frontend** (ej. Render): Root Directory `frontend`, Build `npm install && npm run build`, Start `npm start`.
+- Variable de entorno: `MONGODB_URI` con la cadena de conexión (Atlas o tu Mongo).
+- No es necesario `NEXT_PUBLIC_API_URL`: la API y la UI corren en el mismo dominio.
 
 ## Estructura de la app
 
