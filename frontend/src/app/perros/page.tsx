@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api, type Dog } from '@/lib/api';
@@ -17,7 +17,7 @@ function normalize(s: string) {
 
 const VALID_STAGES = ['cachorro', 'adolescente', 'graduado'] as const;
 
-export default function PerrosPage() {
+function PerrosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const etapaParam = searchParams.get('etapa');
@@ -122,5 +122,13 @@ export default function PerrosPage() {
         </ul>
       )}
     </div>
+  );
+}
+
+export default function PerrosPage() {
+  return (
+    <Suspense fallback={<p className="text-neutral-500">Cargando…</p>}>
+      <PerrosContent />
+    </Suspense>
   );
 }
