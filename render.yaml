@@ -1,0 +1,17 @@
+# Render Blueprint — un solo servicio (Next.js + API)
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: bocalan-perros-asistencia
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+    # Auto-deploy al hacer push a la rama principal
+    autoDeploy: true
