@@ -31,7 +31,17 @@ export async function uploadPhoto(file: File): Promise<string> {
   return data.url;
 }
 
+export interface DashboardStats {
+  cachorros: number;
+  adolescentes: number;
+  graduados: number;
+  vacunasAVencer: number;
+}
+
 export const api = {
+  dashboard: {
+    stats: () => fetchApi<DashboardStats>('/api/dashboard/stats'),
+  },
   dogs: {
     list: () => fetchApi<Dog[]>(`/api/dogs`),
     byStage: (stage: string) => fetchApi<Dog[]>(`/api/dogs/by-stage/${stage}`),
@@ -71,6 +81,7 @@ export const api = {
   },
   veterinaryRecords: {
     list: () => fetchApi<VeterinaryRecord[]>(`/api/veterinary-records`),
+    vacunasAVencer: () => fetchApi<VeterinaryRecord[]>(`/api/veterinary-records/vacunas-a-vencer`),
     byDog: (dogId: string) => fetchApi<VeterinaryRecord[]>(`/api/veterinary-records/dog/${dogId}`),
     get: (id: string) => fetchApi<VeterinaryRecord>(`/api/veterinary-records/${id}`),
     create: (body: Partial<VeterinaryRecord>) => fetchApi<VeterinaryRecord>(`/api/veterinary-records`, { method: 'POST', body: JSON.stringify(body) }),

@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Loader } from '@/components/Loader';
 import { api, type Trainer, type SocializationFamily } from '@/lib/api';
@@ -11,8 +12,11 @@ function normalize(s: string) {
   return s.toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 
-export default function PersonasPage() {
-  const [tab, setTab] = useState<Tab>('entrenadores');
+function PersonasContent() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const tab: Tab = tabParam === 'familias' ? 'familias' : 'entrenadores';
+
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [families, setFamilies] = useState<SocializationFamily[]>([]);
   const [search, setSearch] = useState('');
@@ -43,24 +47,22 @@ export default function PersonasPage() {
       <h1 className="text-2xl sm:text-3xl font-bold text-black">Personas</h1>
 
       <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => setTab('entrenadores')}
+        <Link
+          href="/personas?tab=entrenadores"
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             tab === 'entrenadores' ? 'bg-yellow-400 text-black' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           }`}
         >
           Entrenadores
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab('familias')}
+        </Link>
+        <Link
+          href="/personas?tab=familias"
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             tab === 'familias' ? 'bg-yellow-400 text-black' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           }`}
         >
           Familias
-        </button>
+        </Link>
       </div>
 
       <input
@@ -93,16 +95,14 @@ export default function PersonasPage() {
                 <li key={t._id}>
                   <Link
                     href={`/entrenadores/${t._id}`}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-neutral-50 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-lg" aria-hidden>🧑‍🏫</span>
-                      <div>
-                        <p className="font-semibold">{t.name}</p>
-                        {t.phone && <p className="text-sm text-neutral-600">{t.phone}</p>}
-                      </div>
-                    </div>
-                    <span className="text-sm text-yellow-600">Ver →</span>
+                    {t.photo ? (
+                      <img src={t.photo} alt="" className="w-10 h-10 rounded-full object-cover bg-neutral-100 flex-shrink-0" />
+                    ) : (
+                      <span className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-lg flex-shrink-0" aria-hidden>🧑‍🏫</span>
+                    )}
+                    <span className="font-semibold">{t.name}</span>
                   </Link>
                 </li>
               ))
@@ -133,14 +133,13 @@ export default function PersonasPage() {
                 <li key={f._id}>
                   <Link
                     href={`/familias/${f._id}`}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-neutral-50 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors"
                   >
+                    <span className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-lg flex-shrink-0" aria-hidden>👥</span>
                     <div>
                       <p className="font-semibold">{f.name}</p>
                       <p className="text-sm text-neutral-600">{f.contactName}</p>
-                      {f.city && <p className="text-sm text-neutral-500">{f.city}</p>}
                     </div>
-                    <span className="text-sm text-yellow-600">Ver →</span>
                   </Link>
                 </li>
               ))
@@ -150,5 +149,13 @@ export default function PersonasPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function PersonasPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <PersonasContent />
+    </Suspense>
   );
 }
