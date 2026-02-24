@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, uploadPhoto, type Trainer } from '@/lib/api';
 
 export default function EntrenadorPage() {
@@ -37,7 +38,7 @@ export default function EntrenadorPage() {
     }
   };
 
-  if (!item) return <p className="text-neutral-500">Cargando…</p>;
+  if (!item) return <Loader />;
 
   return (
     <div className="max-w-xl mx-auto space-y-6">

@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, type SocializationFamily } from '@/lib/api';
 
 export default function FamiliaPage() {
@@ -46,7 +47,7 @@ export default function FamiliaPage() {
     }
   };
 
-  if (!item) return <p className="text-neutral-500">Cargando…</p>;
+  if (!item) return <Loader />;
 
   return (
     <div className="max-w-xl mx-auto space-y-6">

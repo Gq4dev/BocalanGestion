@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, type Trainer, type SocializationFamily } from '@/lib/api';
 
 type Tab = 'entrenadores' | 'familias';
@@ -76,7 +77,7 @@ export default function PersonasPage() {
           <div className="flex justify-end">
             <Link href="/entrenadores/nuevo" className="btn-primary text-sm">Nuevo entrenador</Link>
           </div>
-          {loading && <p className="text-neutral-500">Cargando…</p>}
+          {loading && <Loader />}
           {error && <p className="text-red-600">Error: {error}</p>}
           {!loading && !error && trainers.length === 0 && !q && (
             <div className="card text-center py-12 text-neutral-500">
@@ -116,7 +117,7 @@ export default function PersonasPage() {
           <div className="flex justify-end">
             <Link href="/familias/nueva" className="btn-primary text-sm">Nueva familia</Link>
           </div>
-          {loading && <p className="text-neutral-500">Cargando…</p>}
+          {loading && <Loader />}
           {error && <p className="text-red-600">Error: {error}</p>}
           {!loading && !error && families.length === 0 && !q && (
             <div className="card text-center py-12 text-neutral-500">

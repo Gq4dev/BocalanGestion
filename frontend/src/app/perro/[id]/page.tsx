@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, type Dog, type TrainingSheet, type VeterinaryRecord, type SocializationFamily, type Trainer, type Beneficiary } from '@/lib/api';
 
 function normalize(s: string) {
@@ -53,7 +54,7 @@ export default function PerroPage() {
     api.veterinaryRecords.byDog(id).then(setVetRecords).catch(() => {});
   }, [id]);
 
-  if (loading) return <p className="text-neutral-500">Cargando…</p>;
+  if (loading) return <Loader />;
   if (error || !dog) return <p className="text-red-600">Error: {error || 'Perro no encontrado'}</p>;
 
   const family = typeof dog.socializationFamily === 'object' ? dog.socializationFamily as SocializationFamily : null;

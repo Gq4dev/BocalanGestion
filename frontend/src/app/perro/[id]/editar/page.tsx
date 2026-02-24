@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, uploadPhoto, type Dog, type SocializationFamily, type Trainer, type Beneficiary } from '@/lib/api';
 
 export default function EditarPerroPage() {
@@ -67,7 +68,7 @@ export default function EditarPerroPage() {
     }
   };
 
-  if (!dog) return <p className="text-neutral-500">Cargando…</p>;
+  if (!dog) return <Loader />;
 
   return (
     <div className="max-w-xl mx-auto space-y-6">

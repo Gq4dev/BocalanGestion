@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, type TrainingSheet, type TrainingSheetSkill } from '@/lib/api';
 
 const LEVELS: { value: TrainingSheetSkill['level']; label: string }[] = [
@@ -65,7 +66,7 @@ export default function EditarPlanillaPage() {
     }
   };
 
-  if (!sheet) return <p className="text-neutral-500">Cargando…</p>;
+  if (!sheet) return <Loader />;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">

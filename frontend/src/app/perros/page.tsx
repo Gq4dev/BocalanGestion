@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, type Dog } from '@/lib/api';
 
 const STAGES = [
@@ -77,7 +78,7 @@ function PerrosContent() {
         </div>
       </div>
 
-      {loading && <p className="text-neutral-500">Cargando…</p>}
+      {loading && <Loader />}
       {error && <p className="text-red-600">Error: {error}</p>}
       {!loading && !error && dogs.length === 0 && !q && (
         <div className="card text-center py-12 text-neutral-500">
@@ -127,7 +128,7 @@ function PerrosContent() {
 
 export default function PerrosPage() {
   return (
-    <Suspense fallback={<p className="text-neutral-500">Cargando…</p>}>
+    <Suspense fallback={<Loader />}>
       <PerrosContent />
     </Suspense>
   );

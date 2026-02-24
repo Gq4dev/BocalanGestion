@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Loader } from '@/components/Loader';
 import { api, type SocializationFamily } from '@/lib/api';
 
 function normalize(s: string) {
@@ -24,7 +25,7 @@ export default function FamiliasPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-neutral-500">Cargando…</p>;
+  if (loading) return <Loader />;
   if (error) return <p className="text-red-600">Error: {error}</p>;
 
   return (
